@@ -1,5 +1,5 @@
 const multer = require("multer");
-
+const util = require("util");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/images/");
@@ -16,7 +16,9 @@ const upload = multer({
   fileFilter: (req, file, cb) => {
     const match = ["image/png", "image/jpeg", "image/jpg"];
     if (match.indexOf(file.mimetype) === -1) {
-      cb(new Error("file must be .png, .jpg and .jpeg format allowed!", null));
+      return cb(
+        new Error("file must be .png, .jpg and .jpeg format allowed!", null)
+      );
     }
     cb(null, true);
   },

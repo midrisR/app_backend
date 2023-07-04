@@ -5,6 +5,7 @@ const Categories = db.Categorie;
 const Brands = db.Brand;
 const upload = require("../helper/upload");
 const { getPagination, getPagingData } = require("../helper/paginate");
+const multer = require("multer");
 
 const getProducts = async (req, res) => {
   const { page, perPage } = req.query;
@@ -58,34 +59,88 @@ const getProductsByid = async (req, res) => {
 };
 
 const addProduct = async (req, res) => {
-  // const {
-  //   name,
-  //   categorieId,
-  //   description,
-  //   brandId,
-  //   tag,
-  //   metaDescription,
-  //   metaKeywords,
-  //   published,
-  // } = req.body;
-  // const product = await Products.create({
-  //   name: name,
-  //   categorieId: categorieId,
-  //   description: description,
-  //   brandId: brandId,
-  //   tag: tag,
-  //   metaDescription: metaDescription,
-  //   metaKeywords: metaKeywords,
-  //   published: published,
-  // });
-  // res.json(product);
-  upload(req, res, function (err) {
+  const images = [];
+  upload(req, res, async function (err) {
     if (err) {
-      console.log(err);
+      res.status(400).send("Multer error: " + err.message);
     }
-    console.log(req.files);
-    // Everything went fine.
+    const product = await Products.create({
+      name: req.body.name,
+      categorieId: req.body.categorieId,
+      description: req.body.description,
+      brandId: req.body.brandId,
+      tag: req.body.tag,
+      metaDescription: req.body.metaDescription,
+      metaKeywords: req.body.metaKeywords,
+      published: req.body.published,
+    });
+    for (let i = 0; i < req.files.length; i++) {
+      const { filename } = req.files[i];
+      images.push({ name: filename, productId: product.id });
+    }
+    const image = await Images.bulkCreate(images);
+    res.status(201).json({ product, image });
   });
 };
 
-module.exports = { getProducts, getProductsByid, addProduct };
+const updateProduct = async (req, res) => {
+  const images = [];
+  if (req.files.length < 1) {
+    const product = await Products.update(
+      {
+        name: req.body.name,
+        categorieId: req.body.categorieId,
+        description: req.body.description,
+        brandId: req.body.brandId,
+        tag: req.body.tag,
+        metaDescription: req.body.metaDescription,
+        metaKeywords: req.body.metaKeywords,
+        published: req.body.published,
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+    if (req.files.length > 0) {
+      for (let i = 0; i < req.files.length; i++) {
+        const { filename } = req.files[i];
+        images.push({ name: filename, productId: product.id });
+      }
+      const image = await Images.bulkCreate(images);
+      res.status(201).json({ product, image });
+    }
+    console.log(product);
+    res.status(201).json({ product });
+  }
+
+  // upload(req, res, async function (err) {
+  //   if (err) {
+  //     res.status(400).send("Multer error: " + err.message);
+  //   }
+  //   if (!req.files) {
+  //     const product = await Products.update(
+  //       {
+  //         name: req.body.name,
+  //         categorieId: req.body.categorieId,
+  //         description: req.body.description,
+  //         brandId: req.body.brandId,
+  //         tag: req.body.tag,
+  //         metaDescription: req.body.metaDescription,
+  //         metaKeywords: req.body.metaKeywords,
+  //         published: req.body.published,
+  //       },
+  //       {
+  //         where: {
+  //           id: req.params.id,
+  //         },
+  //       }
+  //     );
+  //     console.log(req.params.id);
+  //     res.status(201).json(product);
+
+  //   }
+  // });
+};
+module.exports = { getProducts, getProductsByid, addProduct, updateProduct };
