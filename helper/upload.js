@@ -22,6 +22,6 @@ const upload = multer({
     }
     cb(null, true);
   },
-}).array("file", 10);
+}).array("images", 10);
 
 module.exports = upload;

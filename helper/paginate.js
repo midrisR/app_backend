@@ -1,7 +1,6 @@
 const getPagination = (page, perPage) => {
   const limit = perPage ? +perPage : 10;
   const offset = page ? (page - 1) * limit : 0;
-  console.log(limit, offset);
   return { limit, offset };
 };
 const getPagingData = (data, page, limit) => {

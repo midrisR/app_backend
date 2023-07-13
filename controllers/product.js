@@ -1,3 +1,4 @@
+const fs = require("fs");
 const db = require("../models");
 const Products = db.Product;
 const Images = db.Image;
@@ -5,7 +6,7 @@ const Categories = db.Categorie;
 const Brands = db.Brand;
 const upload = require("../helper/upload");
 const { getPagination, getPagingData } = require("../helper/paginate");
-const multer = require("multer");
+const { json } = require("body-parser");
 
 const getProducts = async (req, res) => {
   const { page, perPage } = req.query;
@@ -85,62 +86,47 @@ const addProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   const images = [];
-  if (req.files.length < 1) {
-    const product = await Products.update(
+  const { id } = req.params;
+
+  const findPrc = await Products.findByPk(id, {
+    include: [
       {
-        name: req.body.name,
-        categorieId: req.body.categorieId,
-        description: req.body.description,
-        brandId: req.body.brandId,
-        tag: req.body.tag,
-        metaDescription: req.body.metaDescription,
-        metaKeywords: req.body.metaKeywords,
-        published: req.body.published,
+        model: Images,
+        attributes: { exclude: ["createdAt", "updatedAt"] },
       },
-      {
-        where: {
-          id: req.params.id,
-        },
-      }
-    );
-    if (req.files.length > 0) {
-      for (let i = 0; i < req.files.length; i++) {
-        const { filename } = req.files[i];
-        images.push({ name: filename, productId: product.id });
-      }
-      const image = await Images.bulkCreate(images);
-      res.status(201).json({ product, image });
+    ],
+  });
+  const product = await Products.update(
+    {
+      name: req.body.name,
+      categorieId: req.body.categorieId,
+      description: req.body.description,
+      brandId: req.body.brandId,
+      tag: req.body.tag,
+      metaDescription: req.body.metaDescription,
+      metaKeywords: req.body.metaKeywords,
+      published: req.body.published,
+    },
+    {
+      where: {
+        id: req.params.id,
+      },
     }
-    console.log(product);
-    res.status(201).json({ product });
+  );
+
+  if (req.files) {
+    await Images.destroy({
+      where: { productId: id },
+    });
+    findPrc.Images.map(({ name }) => {
+      fs.unlinkSync("public/images/" + name);
+    });
+    for (let i = 0; i < req.files.length; i++) {
+      const { filename } = req.files[i];
+      images.push({ name: filename, productId: id });
+    }
+    await Images.bulkCreate(images);
   }
-
-  // upload(req, res, async function (err) {
-  //   if (err) {
-  //     res.status(400).send("Multer error: " + err.message);
-  //   }
-  //   if (!req.files) {
-  //     const product = await Products.update(
-  //       {
-  //         name: req.body.name,
-  //         categorieId: req.body.categorieId,
-  //         description: req.body.description,
-  //         brandId: req.body.brandId,
-  //         tag: req.body.tag,
-  //         metaDescription: req.body.metaDescription,
-  //         metaKeywords: req.body.metaKeywords,
-  //         published: req.body.published,
-  //       },
-  //       {
-  //         where: {
-  //           id: req.params.id,
-  //         },
-  //       }
-  //     );
-  //     console.log(req.params.id);
-  //     res.status(201).json(product);
-
-  //   }
-  // });
+  return res.status(201).json({ product, images: images });
 };
 module.exports = { getProducts, getProductsByid, addProduct, updateProduct };
