@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 03 Jul 2023 pada 16.47
+-- Waktu pembuatan: 17 Jul 2023 pada 17.16
 -- Versi server: 10.4.28-MariaDB
 -- Versi PHP: 8.0.28
 
@@ -605,7 +605,11 @@ INSERT INTO `images` (`id`, `name`, `productId`, `createdAt`, `updatedAt`) VALUE
 (2299, '03a44638660a51ea18a0df15cf1ffbb2.jpg', 3473, '2023-06-25 11:51:32', '2023-06-25 11:51:32'),
 (2300, '6ded42093cf039d3e99f7b815bc16d41.jpg', 3545, '2023-06-25 11:51:32', '2023-06-25 11:51:32'),
 (2301, 'bb2b8ac3479e2c05e92780782873f1e3.jpg', 3446, '2023-06-25 11:51:32', '2023-06-25 11:51:32'),
-(2302, '046f5f91a5050aff5e8f1bffac6d4d2a.jpg', 3446, '2023-06-25 11:51:32', '2023-06-25 11:51:32');
+(2302, '046f5f91a5050aff5e8f1bffac6d4d2a.jpg', 3446, '2023-06-25 11:51:32', '2023-06-25 11:51:32'),
+(2334, '1689435540032.jpeg', 3813, '2023-07-15 15:39:00', '2023-07-15 15:39:00'),
+(2335, '1689435540041.jpeg', 3813, '2023-07-15 15:39:00', '2023-07-15 15:39:00'),
+(2402, '1689606672699.jpeg', 3878, '2023-07-17 15:11:12', '2023-07-17 15:11:12'),
+(2403, '1689606736084.jpeg', 3878, '2023-07-17 15:12:16', '2023-07-17 15:12:16');
 
 -- --------------------------------------------------------
 
@@ -967,7 +971,7 @@ INSERT INTO `products` (`id`, `name`, `categorieId`, `description`, `brandId`, `
 (3760, 'Stub End Short Pattern SS304', 30, '<span style=\"font-size:14px;\">SIZE : 1/2 - 24 INCHI<br />\r\nMATERIAL :&nbsp;ASTM A403 TP304/304L<br />\r\nSTANDARDS :&nbsp;ASME B16.9,MSS SP-43, DIN 2605/JIS B2313, B/T12459, GB/T13401, SH3408/SH3409, HG/T21635, HG/T21631.<br />\r\nMANUFACTURE:&nbsp;CHINA ,MALAYSIA</span>', 15, '', 'STUB END A/SA403 WP 304/304L, ASME B16.9 , STUB END SHORT PATTERN SS304', '', 1, '2021-11-22 14:20:18', '2022-05-17 16:38:29'),
 (3761, 'Bellow Seal Globe Valve Cast Iron', 2, '<span style=\"font-size:14px;\">JUAL BELLOW SEAL GLOBE VALVE &nbsp;MEREK MDT , &nbsp;BELLOW SEAL GLOBE VALVE PN16<br />\r\n<br />\r\nSIZE : 1/2&quot;&nbsp; - 12&quot; (DN15 - DN300)<br />\r\nBODY : GG25 ( CAST IRON )<br />\r\nDISC | STEAM : GG25 / X20Cr13<br />\r\nBELLOW | SEAT : SUS304 / X20Cr13<br />\r\nACTUATOR : HANDWHEEL<br />\r\nEND STANDARD : FLANGE PN16<br />\r\nPRESSURE : 16 BAR / 200<sup>o</sup>C<br />\r\nMANUFACTURE : MALAYSIA</span>', 28, 'Bellow Seal Globe Valve Cast Iron', 'JUAL BELLOW SEAL GLOBE VALVE  MEREK MDT ,  BELLOW SEAL GLOBE VALVE PN16', 'Bellow Seal Globe Valve Cast Iron', 1, '2021-12-13 12:12:51', '0000-00-00 00:00:00'),
 (3762, 'Swing Check Valve Carbon Steel NPT ANSI 800', 2, '<span style=\"font-size:14px;\">JUAL&nbsp;&nbsp;SWING CHECK VALVE NPT ANSI 800 , SWING CHECK VALVE A105 NPT&nbsp;<br />\r\n<br />\r\nSIZE : 1/2&quot; - 4&quot;<br />\r\nBODY : A105N CARBON STEEL<br />\r\nDISC : 2Cr13<br />\r\nSTEM :&nbsp;2Cr13<br />\r\nSEAT :&nbsp;2Cr13<br />\r\nWORKING PRESSURE : ANSI 800<br />\r\nEND CONNECTION : FNPT<br />\r\nMANUFACTURE : MALAYSIA</span>', 30, 'Swing check valve carbon steel npt ansi 800', 'SWING CHECK VALVE NPT ANSI 800 , SWING CHECK VALVE A105 NPT', 'Swing check valve carbon steel npt ansi 800', 1, '2021-12-14 17:13:00', '2021-12-14 17:14:19'),
-(3763, 'Y Strainer Flange RF ANSI Class 150', 2, '<span style=\"font-size:14px;\"><span style=\"line-height:115%\"><span style=\"font-family:Calibri,sans-serif\">JUAL&nbsp;Y STRAINER ANSI 150 WCB FLANGE RF</span></span><br />\r\n<br />\r\nSIZE : 1/2&quot; - 24&quot; or Custom 26&quot; - 48&quot;<br />\r\n<span style=\"line-height:115%\"><span style=\"font-family:Calibri,sans-serif\">FACE TO FACE LENGTH: ASME / ANSI B16.10<br />\r\nCONNECTIONS &amp; DIMENSIONS: ASME / ANSI B16.5, ASME / ANSI B 16.25<br />\r\nFLANGES: RF ANSI #150<br />\r\nPRESSURE &amp; TEMPERATURE: ASME / ANSI B16.34<br />\r\nMANUFACTURE : CHINA</span></span><br />\r\n<br />\r\n<strong><u>MATERIAL</u></strong><br />\r\n<span style=\"line-height:115%\"><span style=\"font-family:Calibri,sans-serif\">BODY-COVER : CAST STEEL A216WCB, GP240GH+N<br />\r\nSCREEN : STAINLESS STEEL AISI 304<br />\r\nGASKET : GRAPHITE<br />\r\nDRAIN PLUG : FORGED STEEL A105<br />\r\nBOLTS : A 193 GR. B7<br />\r\nNUTS : A 194 GR. 2H</span></span></span>', 31, 'Y Strainer Flange RF ANSI Class 150', 'JUAL Y STRAINER ANSI 150 WCB FLANGE RF', 'Y Strainer Flange RF ANSI Class 150', 1, '2021-12-17 13:51:55', '2021-12-17 14:39:07'),
+(3763, 'Y STRAINER FLANGE RF ANSI CLASS 150', 0, 'Y STRAINER FLANGE RF ANSI CLASS 150', 31, 'Y STRAINER FLANGE RF ANSI CLASS 150', 'Y STRAINER FLANGE RF ANSI CLASS 150', 'Y STRAINER FLANGE RF ANSI CLASS 150', 1, '2021-12-17 13:51:55', '2023-07-15 15:15:34'),
 (3765, 'Threaded Rod ASTM A193 Grade B7', 10, '<span style=\"font-size:14px;\">JUAL AS DRAT LONG DRAT GRADE B7 , AS DRAT CARBON STEEL, AS DRAT ASTM A193 , LONG DRAT ASTM A193, THREADED ROD A193 GRADE B7, AS DRAT LONG DRAT ASTM A193 B7<br />\r\n<br />\r\nSTANDARD :&nbsp;ASTM A193 GRADE B7&nbsp;<br />\r\nDIAMETER : 1/4&quot; - 3&quot;, M10 - M30<br />\r\nLENGTH : 1000mm, 2000mm, 3000mm<br />\r\nMANUFACTURED : LOKAL, CHINA</span>', 32, '', 'AS DRAT GRADE B7 , AS DRAT CARBON STEEL, AS DRAT A193 , THREADED ROD A193 GRADE B7', '', 1, '2022-01-07 15:23:15', '2022-09-30 13:49:02'),
 (3766, 'Elbow 90 Degree Lr Seamless Stainless Steel 316', 30, '<span style=\"font-size:14px;\"><span style=\"background:white\"><span style=\"line-height:normal\"><span style=\"font-family:Calibri,sans-serif\"><span lato=\"\" style=\"font-family:\"><span style=\"color:#212529\"><span style=\"text-transform:uppercase\">JUAL&nbsp;&nbsp;ELBOW 90 DEGREE SEAMLESS STAINLESS STEEL 316 , ELBOW 90 DEGREE SEAMLESS LR , ELBOW SEAMLESS STAINLESS STEEL TYPE LONG RADIUS</span></span></span></span></span></span><br />\r\n<br />\r\n<br />\r\n<br />\r\n<span style=\"line-height:107%\"><span style=\"font-family:Calibri,sans-serif\"><span style=\"background:white\"><span style=\"line-height:107%\"><span style=\"font-family:Roboto\"><span style=\"color:#212529\">TYPE : LONG RADIUS</span></span></span></span><br style=\"box-sizing:border-box\" />\r\n<span style=\"background:white\"><span style=\"line-height:107%\"><span style=\"font-family:Roboto\"><span style=\"color:#212529\"><span style=\"box-sizing:border-box\"><span style=\"box-sizing:border-box\"><span style=\"box-sizing:border-box\">SIZE :1/2&quot; - 48&quot;</span></span></span></span></span></span></span><br style=\"box-sizing:border-box\" />\r\n<span style=\"background:white\"><span style=\"line-height:107%\"><span style=\"font-family:Roboto\"><span style=\"color:#212529\"><span style=\"box-sizing:border-box\"><span style=\"box-sizing:border-box\"><span style=\"box-sizing:border-box\">WT :&nbsp;SCH 5S - SCH XXS</span></span></span></span></span></span></span><br style=\"box-sizing:border-box\" />\r\n<span style=\"background:white\"><span style=\"line-height:107%\"><span style=\"font-family:Roboto\"><span style=\"color:#212529\"><span style=\"box-sizing:border-box\"><span style=\"box-sizing:border-box\"><span style=\"box-sizing:border-box\">MATERIAL :&nbsp;STAINLESS STEEL 316</span></span></span></span></span></span></span><br style=\"box-sizing:border-box\" />\r\n<span style=\"background:white\"><span style=\"line-height:107%\"><span style=\"font-family:Roboto\"><span style=\"color:#212529\"><span style=\"box-sizing:border-box\"><span style=\"box-sizing:border-box\"><span style=\"box-sizing:border-box\">STAINLESS STEEL : ASTM A403 - TP316/316L&nbsp;</span></span></span></span></span></span></span><br style=\"box-sizing:border-box\" />\r\n<span style=\"background:white\"><span style=\"line-height:107%\"><span style=\"font-family:Roboto\"><span style=\"color:#212529\"><span style=\"box-sizing:border-box\"><span style=\"box-sizing:border-box\"><span style=\"box-sizing:border-box\">STANDARDS :&nbsp;ASME B16.9,MSS SP-43, DIN 2605/JIS B2313<br style=\"box-sizing:border-box\" />\r\nMANUFACTURE : CHINA</span></span></span></span></span></span></span><br style=\"box-sizing:border-box; font-variant-ligatures:normal; font-variant-caps:normal; orphans:2; widows:2; -webkit-text-stroke-width:0px; text-decoration-thickness:initial; text-decoration-style:initial; text-decoration-color:initial; word-spacing:0px\" />\r\n&nbsp;</span></span></span><br />\r\n&nbsp;', 15, 'Elbow 90 degree LR Seamless Stainless Steel 316', 'ELBOW 90 DEGREE SEAMLESS STAINLESS STEEL 316 , ELBOW 90 DEGREE SEAMLESS LR , ELBOW SEAMLESS STAINLESS STEEL TYPE LONG RADIUS', 'Elbow 90 Degree Lr Seamless Stainless Steel 316', 1, '2022-01-19 09:46:53', '2022-01-27 15:36:05'),
 (3767, 'Temperature Gauge Wika', 4, '<h1><span style=\"font-size:14px;\">JUAL TEMPERATURE GAUGE WIKA MODEL PAYUNG STAINLESS STEEL 316<br />\r\n<br />\r\nSIZE : 4&quot; x 1/2&quot; NPT<br />\r\nCASE MATERIAL : STAINLESS STEEL 316<br />\r\nRANGE SUHU :&nbsp;0 - 200<sup>o</sup>F<br />\r\nMODEL PAYUNG</span></h1>', 33, 'Pressure Guage Wika', 'TEMPERATURE GAUGE WIKA MODEL PAYUNG STAINLESS STEEL 316', 'Pressure Guage Wika', 1, '2022-02-10 11:30:45', '2022-02-10 11:33:18'),
@@ -989,11 +993,8 @@ INSERT INTO `products` (`id`, `name`, `categorieId`, `description`, `brandId`, `
 (3782, 'Stub End Short Pattern SS316', 30, '<span style=\"font-size:14px;\">SIZE : 1/2 - 24 INCHI<br />\r\nMATERIAL :&nbsp;ASTM A403 TP315/316L<br />\r\nSTANDARDS :&nbsp;ASME B16.9,MSS SP-43, DIN 2605/JIS B2313, B/T12459, GB/T13401, SH3408/SH3409, HG/T21635, HG/T21631.<br />\r\nMANUFACTURE:&nbsp;CHINA ,MALAYSIA</span>', 15, '', 'STUB END A/SA403 WP 316/316L, ASME B16.9 , STUB END SHORT PATTERN SS316', '', 1, '2022-05-17 16:51:26', '2022-05-17 16:52:00'),
 (3783, 'KING COMBINATION NIPPLE NPT THREADED', 30, '<span style=\"font-size:14px;\">JUAL KING NIPPLE 1/4 INCH 6 INCH 8 INCH 12 INCH, KING NEPEL NPT, KING NEPEL SS304 SS316, KING NEPEL STAINLESS STEEL, KING NIPPLE SS304 SS316, KING NIPPLE STAINLESS STEEL, KING COMBINATION NIPPLE NPT THREADED, KING NEPEL COMBINATION NPT THREADED<br />\r\n<br />\r\nSIZE : 1/4&quot; - 6&quot; &amp; 8&quot; -12&quot;&nbsp; ( SPECIAL CUSTOM )<br />\r\nMATERIAL : SS304 , SS316<br />\r\nCONNECTION :&nbsp;&nbsp;NPT THREADED END</span>', 17, 'KING NIPPLE STAINLESS STEEL 304', 'JUAL KING NIPPLE 1/4 INCH 6 INCH 8 INCH 12 INCH, KING NEPEL NPT, KING NEPEL SS304 SS316, KING NEPEL STAINLESS STEEL, KING NIPPLE SS304 SS316, KING NIPPLE STAINLESS STEEL,Â KING COMBINATION NIPPLE NPT THREADED, KING NEPEL COMBINATION NPT THREADED', 'JUAL KING NIPPLE 1/4 INCH 6 INCH 8 INCH 12 INCH, KING NEPEL NPT, KING NEPEL SS304 SS316, KING NEPEL STAINLESS STEEL, KING NIPPLE SS304 SS316, KING NIPPLE STAINLESS STEEL,Â KING COMBINATION NIPPLE NPT THREADED, KING NEPEL COMB', 1, '2022-05-27 16:02:36', '2022-06-13 12:15:38'),
 (3784, 'Ring Type Joint R31 SS316 Type Oval', 30, 'JUAL RING TYPE JOINT R31 SS316 TYPE OVAL MERK CONSEAL, RING TYPE JOINT R31 CONSEAL&nbsp;<br />\r\n<br />\r\nTYPE : OVAL<br />\r\nMATERIAL : SS316', 13, 'Ring Type Joint R31 SS316 Type Oval', 'JUAL RING TYPE JOINT R31 SS316 TYPE OVAL MERK CONSEAL, RING TYPE JOINT R31 CONSEAL', 'RING TYPE JOINT R31 SS316 TYPE OVAL MERK CONSEAL, RING TYPE JOINT R31 CONSEAL, Ring Type Join Type Oval', 1, '2022-07-07 10:13:05', '2022-08-25 11:22:10'),
-(3790, 'example', 0, 'example', 0, 'example', 'example', 'example', 1, '2023-07-01 14:26:30', '2023-07-01 14:26:30'),
-(3802, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-07-03 14:30:18', '2023-07-03 14:30:18'),
-(3803, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-07-03 14:30:31', '2023-07-03 14:30:31'),
-(3804, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-07-03 14:31:05', '2023-07-03 14:31:05'),
-(3805, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2023-07-03 14:32:47', '2023-07-03 14:32:47');
+(3813, 'example 4', 3, 'example 5', 4, 'example 5', 'example 5', 'example 5', 0, '2023-07-15 15:39:00', '2023-07-16 13:44:33'),
+(3878, 'example 667', 14, 'example 66', 2, 'example 66', 'example 66', 'example 66', 1, '2023-07-17 13:30:10', '2023-07-17 15:12:16');
 
 -- --------------------------------------------------------
 
@@ -1130,7 +1131,7 @@ ALTER TABLE `categories`
 --
 ALTER TABLE `images`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `productId` (`productId`);
+  ADD KEY `images_ibfk_1` (`productId`);
 
 --
 -- Indeks untuk tabel `products`
@@ -1192,13 +1193,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT untuk tabel `images`
 --
 ALTER TABLE `images`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2303;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2404;
 
 --
 -- AUTO_INCREMENT untuk tabel `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3806;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3879;
 
 --
 -- AUTO_INCREMENT untuk tabel `profiles`
@@ -1226,7 +1227,7 @@ ALTER TABLE `users`
 -- Ketidakleluasaan untuk tabel `images`
 --
 ALTER TABLE `images`
-  ADD CONSTRAINT `images_ibfk_1` FOREIGN KEY (`productId`) REFERENCES `products` (`id`);
+  ADD CONSTRAINT `images_ibfk_1` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ketidakleluasaan untuk tabel `profiles`
