@@ -4,14 +4,12 @@ const Products = db.Product;
 const Images = db.Image;
 const Categories = db.Categorie;
 const Brands = db.Brand;
-const upload = require("../helper/upload");
 const { getPagination, getPagingData } = require("../helper/paginate");
-const { json } = require("body-parser");
-
+const upload = require("../helper/upload");
+const path = require("path");
 const getProducts = async (req, res) => {
   const { page, perPage } = req.query;
   const { limit, offset } = getPagination(page, perPage);
-
   const { count, rows } = await Products.findAndCountAll({
     distinct: true,
     order: [["createdAt", "DESC"]],
@@ -34,7 +32,7 @@ const getProducts = async (req, res) => {
   });
   const data = { count: count, rows };
   const products = getPagingData(data, page, limit);
-  res.status(200).json({ products, total: products.length });
+  return res.status(200).json({ products, total: products.length });
 };
 
 const getProductsByid = async (req, res) => {
@@ -61,27 +59,28 @@ const getProductsByid = async (req, res) => {
 
 const addProduct = async (req, res) => {
   const images = [];
-  upload(req, res, async function (err) {
-    if (err) {
-      res.status(400).send("Multer error: " + err.message);
-    }
-    const product = await Products.create({
-      name: req.body.name,
-      categorieId: req.body.categorieId,
-      description: req.body.description,
-      brandId: req.body.brandId,
-      tag: req.body.tag,
-      metaDescription: req.body.metaDescription,
-      metaKeywords: req.body.metaKeywords,
-      published: req.body.published,
-    });
-    for (let i = 0; i < req.files.length; i++) {
-      const { filename } = req.files[i];
-      images.push({ name: filename, productId: product.id });
-    }
-    const image = await Images.bulkCreate(images);
-    res.status(201).json({ product, image });
+  const product = await Products.create({
+    name: req.body.name,
+    categorieId: req.body.categorieId,
+    description: req.body.description,
+    brandId: req.body.brandId,
+    tag: req.body.tag,
+    metaDescription: req.body.metaDescription,
+    metaKeywords: req.body.metaKeywords,
+    published: req.body.published,
   });
+
+  fs.mkdirSync(`public/images/${product.id}`);
+
+  for (let i = 0; i < req.files.length; i++) {
+    const { filename } = req.files[i];
+    images.push({ name: filename, productId: product.id });
+    const currentPath = "public/images/" + filename;
+    const destinationPath = `public/images/${product.id}/` + filename;
+    fs.renameSync(currentPath, destinationPath);
+  }
+  const image = await Images.bulkCreate(images);
+  return res.status(201).json({ success: true, product, image });
 };
 
 const updateProduct = async (req, res) => {
@@ -96,6 +95,11 @@ const updateProduct = async (req, res) => {
       },
     ],
   });
+
+  if (!findPrc) {
+    return res.status(500).json("someting error");
+  }
+
   const product = await Products.update(
     {
       name: req.body.name,
@@ -107,26 +111,39 @@ const updateProduct = async (req, res) => {
       metaKeywords: req.body.metaKeywords,
       published: req.body.published,
     },
-    {
-      where: {
-        id: req.params.id,
-      },
-    }
+    { where: { id: req.params.id } }
   );
 
-  if (req.files) {
-    await Images.destroy({
-      where: { productId: id },
-    });
-    findPrc.Images.map(({ name }) => {
-      fs.unlinkSync("public/images/" + name);
-    });
+  // findPrc.Images.map(({ name }) => {
+  //   fs.unlinkSync(`public/images/${id}/` + name);
+  // });
+
+  if (req.files.length > 0) {
     for (let i = 0; i < req.files.length; i++) {
       const { filename } = req.files[i];
       images.push({ name: filename, productId: id });
+      const currentPath = "public/images/" + filename;
+      const destinationPath = `public/images/${id}/` + filename;
+      fs.renameSync(currentPath, destinationPath);
     }
     await Images.bulkCreate(images);
   }
-  return res.status(201).json({ product, images: images });
+
+  return res.status(200).json({ success: true, product, images: images });
 };
-module.exports = { getProducts, getProductsByid, addProduct, updateProduct };
+const deleteProduct = async (req, res) => {
+  const remove = await Products.destroy({
+    where: {
+      id: req.params.id,
+    },
+  });
+  fs.rmSync(`public/images/${req.params.id}`, { recursive: true });
+  return res.status(200).json({ success: true, remove });
+};
+module.exports = {
+  getProducts,
+  getProductsByid,
+  addProduct,
+  updateProduct,
+  deleteProduct,
+};
