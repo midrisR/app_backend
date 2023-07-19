@@ -26,7 +26,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 
 app.use("/api/product/", productRoute);
-app.use("/api/categorie/", verifyToken, categorieRoute);
+app.use("/api/categorie/", categorieRoute);
 app.use("/api/brand/", verifyToken, brandRoute);
 app.use("/api/image/", imageRoute);
 

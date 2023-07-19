@@ -6,7 +6,6 @@ const Categories = db.Categorie;
 const Brands = db.Brand;
 const { getPagination, getPagingData } = require("../helper/paginate");
 const upload = require("../helper/upload");
-const path = require("path");
 const getProducts = async (req, res) => {
   const { page, perPage } = req.query;
   const { limit, offset } = getPagination(page, perPage);
@@ -70,13 +69,13 @@ const addProduct = async (req, res) => {
     published: req.body.published,
   });
 
-  fs.mkdirSync(`public/images/${product.id}`);
+  fs.mkdirSync(`public/images/item/${product.id}`);
 
   for (let i = 0; i < req.files.length; i++) {
     const { filename } = req.files[i];
     images.push({ name: filename, productId: product.id });
-    const currentPath = "public/images/" + filename;
-    const destinationPath = `public/images/${product.id}/` + filename;
+    const currentPath = "public/images/item/" + filename;
+    const destinationPath = `public/images/item/${product.id}/` + filename;
     fs.renameSync(currentPath, destinationPath);
   }
   const image = await Images.bulkCreate(images);
@@ -114,16 +113,12 @@ const updateProduct = async (req, res) => {
     { where: { id: req.params.id } }
   );
 
-  // findPrc.Images.map(({ name }) => {
-  //   fs.unlinkSync(`public/images/${id}/` + name);
-  // });
-
   if (req.files.length > 0) {
     for (let i = 0; i < req.files.length; i++) {
       const { filename } = req.files[i];
       images.push({ name: filename, productId: id });
-      const currentPath = "public/images/" + filename;
-      const destinationPath = `public/images/${id}/` + filename;
+      const currentPath = "public/images/item/" + filename;
+      const destinationPath = `public/images/item/${id}/` + filename;
       fs.renameSync(currentPath, destinationPath);
     }
     await Images.bulkCreate(images);
@@ -137,7 +132,7 @@ const deleteProduct = async (req, res) => {
       id: req.params.id,
     },
   });
-  fs.rmSync(`public/images/${req.params.id}`, { recursive: true });
+  fs.rmSync(`public/images/item/${req.params.id}`, { recursive: true });
   return res.status(200).json({ success: true, remove });
 };
 module.exports = {
