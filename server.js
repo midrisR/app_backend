@@ -3,18 +3,19 @@ const app = express();
 const dotenv = require("dotenv");
 const cors = require("cors");
 const db = require("./models");
-const verifyToken = require("./helper/verifyToken");
 const userRoute = require("./router/user");
 const authRoute = require("./router/auth");
 const productRoute = require("./router/product");
 const categorieRoute = require("./router/categorie");
 const brandRoute = require("./router/brand");
 const imageRoute = require("./router/image");
+const bodyParser = require("body-parser");
 const { errorHandler } = require("./middleware/error");
 const port = 5000;
 
 dotenv.config();
 app.use(cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
@@ -27,7 +28,7 @@ app.use("/api/user", userRoute);
 
 app.use("/api/product/", productRoute);
 app.use("/api/categorie/", categorieRoute);
-app.use("/api/brand/", verifyToken, brandRoute);
+app.use("/api/brand/", brandRoute);
 app.use("/api/image/", imageRoute);
 
 app.use(errorHandler);

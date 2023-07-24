@@ -1,9 +1,11 @@
 const { addImage, removeImg } = require("../controllers/image");
 const verifyToken = require("../helper/verifyToken");
-// const upload = require("../helper/upload");
-
 const router = require("express").Router();
-router.get("/", addImage);
+
+// const upload = require("../helper/upload");
+// router.get("/", addImage);
+
+router.post("/", addImage);
 router.delete("/:id", verifyToken, removeImg);
 
 module.exports = router;

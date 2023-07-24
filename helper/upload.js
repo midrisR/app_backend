@@ -17,9 +17,7 @@ const upload = (dest) => {
     fileFilter: (req, file, cb) => {
       const match = ["image/png", "image/jpeg", "image/jpg"];
       if (match.indexOf(file.mimetype) === -1) {
-        return cb(
-          new Error("file must be .png, .jpg and .jpeg format allowed!", null)
-        );
+        return cb("file must be .png, .jpg and .jpeg format allowed!", false);
       }
       cb(null, true);
     },

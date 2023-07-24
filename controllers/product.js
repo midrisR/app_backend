@@ -4,8 +4,15 @@ const Products = db.Product;
 const Images = db.Image;
 const Categories = db.Categorie;
 const Brands = db.Brand;
+const validation = require("../validations/productValidation");
+const asyncHandler = require("express-async-handler");
 const { getPagination, getPagingData } = require("../helper/paginate");
-const upload = require("../helper/upload");
+
+const isEmptyFields = (data) => {
+  const error = data.reduce((val, cur) => ({ ...val, ...cur }), {});
+  return error;
+};
+
 const getProducts = async (req, res) => {
   const { page, perPage } = req.query;
   const { limit, offset } = getPagination(page, perPage);
@@ -19,7 +26,9 @@ const getProducts = async (req, res) => {
       },
       {
         model: Categories,
-        attributes: { exclude: ["image", "createdAt", "updatedAt"] },
+        attributes: {
+          exclude: ["id", "image", "published", "createdAt", "updatedAt"],
+        },
       },
       {
         model: Images,
@@ -40,24 +49,35 @@ const getProductsByid = async (req, res) => {
   const product = await Products.findByPk(id, {
     include: [
       {
-        model: Brands,
-        attributes: { exclude: ["createdAt", "updatedAt"] },
-      },
-      {
-        model: Categories,
-        attributes: { exclude: ["image", "createdAt", "updatedAt"] },
-      },
-      {
         model: Images,
         attributes: { exclude: ["createdAt", "updatedAt"] },
       },
     ],
+    attributes: { exclude: ["createdAt", "updatedAt"] },
   });
   res.status(200).json(product);
 };
 
-const addProduct = async (req, res) => {
+const addProduct = asyncHandler(async (req, res, netx) => {
   const images = [];
+  const { error } = validation(req.body);
+  const errors = [];
+  if (req.files.length < 1) {
+    errors.push({ images: "image cannot be an empty field" });
+  }
+  if (error || req.files.length < 1) {
+    for (let i = 0; i < req.files.length; i++) {
+      const { path } = req.files[i];
+      fs.unlinkSync(path);
+    }
+    error?.details?.forEach(function (detail) {
+      errors.push({
+        [detail.path]: detail.message,
+      });
+    });
+    res.status(422);
+    throw isEmptyFields(errors);
+  }
   const product = await Products.create({
     name: req.body.name,
     categorieId: req.body.categorieId,
@@ -80,7 +100,7 @@ const addProduct = async (req, res) => {
   }
   const image = await Images.bulkCreate(images);
   return res.status(201).json({ success: true, product, image });
-};
+});
 
 const updateProduct = async (req, res) => {
   const images = [];
