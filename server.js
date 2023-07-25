@@ -8,8 +8,9 @@ const authRoute = require("./router/auth");
 const productRoute = require("./router/product");
 const categorieRoute = require("./router/categorie");
 const brandRoute = require("./router/brand");
+const vendorRoute = require("./router/vendor");
+const clientRoute = require("./router/client");
 const imageRoute = require("./router/image");
-const bodyParser = require("body-parser");
 const { errorHandler } = require("./middleware/error");
 const port = 5000;
 
@@ -29,6 +30,8 @@ app.use("/api/user", userRoute);
 app.use("/api/product/", productRoute);
 app.use("/api/categorie/", categorieRoute);
 app.use("/api/brand/", brandRoute);
+app.use("/api/vendor/", vendorRoute);
+app.use("/api/client/", clientRoute);
 app.use("/api/image/", imageRoute);
 
 app.use(errorHandler);

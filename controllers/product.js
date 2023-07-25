@@ -102,9 +102,11 @@ const addProduct = asyncHandler(async (req, res, netx) => {
   return res.status(201).json({ success: true, product, image });
 });
 
-const updateProduct = async (req, res) => {
+const updateProduct = asyncHandler(async (req, res) => {
   const images = [];
   const { id } = req.params;
+  const { error } = validation(req.body);
+  const errors = [];
 
   const findPrc = await Products.findByPk(id, {
     include: [
@@ -117,6 +119,20 @@ const updateProduct = async (req, res) => {
 
   if (!findPrc) {
     return res.status(500).json("someting error");
+  }
+
+  if (error) {
+    for (let i = 0; i < req.files.length; i++) {
+      const { path } = req.files[i];
+      fs.unlinkSync(path);
+    }
+    error?.details?.forEach(function (detail) {
+      errors.push({
+        [detail.path]: detail.message,
+      });
+    });
+    res.status(422);
+    throw isEmptyFields(errors);
   }
 
   const product = await Products.update(
@@ -145,7 +161,8 @@ const updateProduct = async (req, res) => {
   }
 
   return res.status(200).json({ success: true, product, images: images });
-};
+});
+
 const deleteProduct = async (req, res) => {
   const remove = await Products.destroy({
     where: {
