@@ -32,7 +32,6 @@ module.exports = {
       tag: {
         type: Sequelize.STRING,
       },
-
       metaDescription: {
         type: Sequelize.TEXT,
       },

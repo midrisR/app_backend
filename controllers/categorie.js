@@ -1,44 +1,88 @@
 const fs = require("fs");
 const db = require("../models");
-const { log } = require("console");
 const Categories = db.Categorie;
+const brandValidation = require("../validations/brandValidation");
+const asyncHandler = require("express-async-handler");
+const isEmptyFields = (data) => {
+  const error = data.reduce((val, cur) => ({ ...val, ...cur }), {});
+  return error;
+};
 
-exports.findAll = async (req, res) => {
+exports.findAll = asyncHandler(async (req, res) => {
   const categorie = await Categories.findAll({
-    where: { published: 1 },
     order: [["id", "DESC"]],
   });
   return res.status(200).json(categorie);
-};
-exports.findById = async (req, res) => {
+});
+
+exports.findById = asyncHandler(async (req, res) => {
   const categorie = await Categories.findByPk(req.params.id);
   return res.status(200).json(categorie);
-};
+});
 
-exports.create = async (req, res) => {
-  const { filename } = req.files[0];
+exports.create = asyncHandler(async (req, res) => {
+  const { error } = brandValidation(req.body);
+  const errors = [];
+
+  if (req.files.length < 1) {
+    errors.push({ images: "image cannot be an empty field" });
+  }
+
+  if (error || req.files.length < 1) {
+    for (let i = 0; i < req.files.length; i++) {
+      const { path } = req.files[i];
+      fs.unlinkSync(path);
+    }
+    error?.details?.forEach(function (detail) {
+      errors.push({
+        [detail.path]: detail.message,
+      });
+    });
+    res.status(422);
+    throw isEmptyFields(errors);
+  }
 
   const categorie = await Categories.create({
     name: req.body.name,
-    image: filename,
+    image: req.files[0].filename,
     published: req.body.published,
   });
+
   if (categorie) {
     fs.mkdirSync(`public/images/categories/${categorie.id}`);
-    const currentPath = "public/images/categories/" + filename;
+    const currentPath = "public/images/categories/" + req.files[0].filename;
     const destinationPath =
-      `public/images/categories/${categorie.id}/` + filename;
+      `public/images/categories/${categorie.id}/` + req.files[0].filename;
     fs.renameSync(currentPath, destinationPath);
   }
-  return res.status(201).json({ success: true, categorie, image: filename });
-};
-exports.updateCategorie = async (req, res) => {
+  return res
+    .status(201)
+    .json({ success: true, categorie, image: req.files[0].filename });
+});
+
+exports.updateCategorie = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const findCategorie = await Categories.findByPk(id);
 
   if (!findCategorie) {
     return res.status(500).json("categorie not found");
+  }
+  const { error } = brandValidation(req.body);
+  const errors = [];
+
+  if (error) {
+    for (let i = 0; i < req.files.length; i++) {
+      const { path } = req.files[i];
+      fs.unlinkSync(path);
+    }
+    error?.details?.forEach(function (detail) {
+      errors.push({
+        [detail.path]: detail.message,
+      });
+    });
+    res.status(422);
+    throw isEmptyFields(errors);
   }
 
   const categorie = await Categories.update(
@@ -62,7 +106,7 @@ exports.updateCategorie = async (req, res) => {
     categorie,
     images: req?.files[0]?.filename || findCategorie.image,
   });
-};
+});
 
 exports.deleteCategorie = async (req, res) => {
   const { id } = req.params;

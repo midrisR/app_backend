@@ -10,6 +10,7 @@ const categorieRoute = require("./router/categorie");
 const brandRoute = require("./router/brand");
 const vendorRoute = require("./router/vendor");
 const clientRoute = require("./router/client");
+const offersRoute = require("./router/offers");
 const imageRoute = require("./router/image");
 const { errorHandler } = require("./middleware/error");
 const port = 5000;
@@ -32,6 +33,7 @@ app.use("/api/categorie/", categorieRoute);
 app.use("/api/brand/", brandRoute);
 app.use("/api/vendor/", vendorRoute);
 app.use("/api/client/", clientRoute);
+app.use("/api/offers/", offersRoute);
 app.use("/api/image/", imageRoute);
 
 app.use(errorHandler);

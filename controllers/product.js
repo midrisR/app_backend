@@ -58,7 +58,7 @@ const getProductsByid = async (req, res) => {
   res.status(200).json(product);
 };
 
-const addProduct = asyncHandler(async (req, res, netx) => {
+const addProduct = asyncHandler(async (req, res) => {
   const images = [];
   const { error } = validation(req.body);
   const errors = [];
