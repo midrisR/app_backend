@@ -5,6 +5,7 @@ const upload = require("../helper/upload");
 
 router.get("/", Products.getProducts);
 router.get("/:id", Products.getProductsByid);
+router.get("/categorie/:id", Products.getProductsByCategories);
 router.post(
   "/",
   verifyToken,

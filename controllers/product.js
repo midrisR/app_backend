@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const fs = require("fs");
 const db = require("../models");
 const Products = db.Product;
@@ -13,8 +14,8 @@ const isEmptyFields = (data) => {
   return error;
 };
 
-const getProducts = async (req, res) => {
-  const { page, perPage } = req.query;
+const getProducts = asyncHandler(async (req, res) => {
+  const { page, perPage, categories, brands } = req.query;
   const { limit, offset } = getPagination(page, perPage);
   const { count, rows } = await Products.findAndCountAll({
     distinct: true,
@@ -22,6 +23,69 @@ const getProducts = async (req, res) => {
     include: [
       {
         model: Brands,
+        where: {
+          name: {
+            [Op.or]: brands !== "" ? [brands.split(",")] : [],
+          },
+        },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      },
+      {
+        model: Categories,
+        where: {
+          name: {
+            [Op.or]: categories !== "" ? [categories.split(",")] : [],
+          },
+        },
+        attributes: {
+          exclude: ["id", "image", "published", "createdAt", "updatedAt"],
+        },
+      },
+      {
+        model: Images,
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      },
+    ],
+    limit,
+    offset,
+  });
+  const data = { count: count, rows };
+  const products = getPagingData(data, page, limit);
+  return res.status(200).json({ products, total: products.length });
+});
+
+const getProductsByid = async (req, res) => {
+  const { id } = req.params;
+
+  const product = await Products.findByPk(id, {
+    include: [
+      {
+        model: Images,
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      },
+    ],
+    attributes: { exclude: ["createdAt", "updatedAt"] },
+  });
+  res.status(200).json(product);
+};
+
+const getProductsByCategories = asyncHandler(async (req, res) => {
+  const { page, perPage, brands } = req.query;
+  const { limit, offset } = getPagination(page, perPage);
+  const { count, rows } = await Products.findAndCountAll({
+    distinct: true,
+    where: {
+      categorieId: { [Op.eq]: req.params.id },
+    },
+    order: [["createdAt", "DESC"]],
+    include: [
+      {
+        model: Brands,
+        where: {
+          name: {
+            [Op.or]: brands !== "" ? [brands.split(",")] : [],
+          },
+        },
         attributes: { exclude: ["createdAt", "updatedAt"] },
       },
       {
@@ -41,35 +105,23 @@ const getProducts = async (req, res) => {
   const data = { count: count, rows };
   const products = getPagingData(data, page, limit);
   return res.status(200).json({ products, total: products.length });
-};
-
-const getProductsByid = async (req, res) => {
-  const { id } = req.params;
-
-  const product = await Products.findByPk(id, {
-    include: [
-      {
-        model: Images,
-        attributes: { exclude: ["createdAt", "updatedAt"] },
-      },
-    ],
-    attributes: { exclude: ["createdAt", "updatedAt"] },
-  });
-  res.status(200).json(product);
-};
+});
 
 const addProduct = asyncHandler(async (req, res) => {
   const images = [];
   const { error } = validation(req.body);
   const errors = [];
+
   if (req.files.length < 1) {
     errors.push({ images: "image cannot be an empty field" });
   }
+
   if (error || req.files.length < 1) {
     for (let i = 0; i < req.files.length; i++) {
       const { path } = req.files[i];
       fs.unlinkSync(path);
     }
+
     error?.details?.forEach(function (detail) {
       errors.push({
         [detail.path]: detail.message,
@@ -78,6 +130,7 @@ const addProduct = asyncHandler(async (req, res) => {
     res.status(422);
     throw isEmptyFields(errors);
   }
+
   const product = await Products.create({
     name: req.body.name,
     categorieId: req.body.categorieId,
@@ -98,6 +151,7 @@ const addProduct = asyncHandler(async (req, res) => {
     const destinationPath = `public/images/item/${product.id}/` + filename;
     fs.renameSync(currentPath, destinationPath);
   }
+
   const image = await Images.bulkCreate(images);
   return res.status(201).json({ success: true, product, image });
 });
@@ -178,4 +232,5 @@ module.exports = {
   addProduct,
   updateProduct,
   deleteProduct,
+  getProductsByCategories,
 };

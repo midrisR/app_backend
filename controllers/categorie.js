@@ -1,6 +1,7 @@
 const fs = require("fs");
 const db = require("../models");
 const Categories = db.Categorie;
+const Products = db.Product;
 const brandValidation = require("../validations/brandValidation");
 const asyncHandler = require("express-async-handler");
 const isEmptyFields = (data) => {
@@ -16,7 +17,14 @@ exports.findAll = asyncHandler(async (req, res) => {
 });
 
 exports.findById = asyncHandler(async (req, res) => {
-  const categorie = await Categories.findByPk(req.params.id);
+  const categorie = await Categories.findByPk(req.params.id, {
+    include: [
+      {
+        model: Products,
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      },
+    ],
+  });
   return res.status(200).json(categorie);
 });
 
