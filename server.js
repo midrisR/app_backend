@@ -23,7 +23,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
 app.use("/images", express.static("images"));
 
-// api route
 app.use("/api/auth", authRoute);
 
 app.use("/api/user", userRoute);
