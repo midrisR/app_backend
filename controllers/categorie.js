@@ -4,6 +4,7 @@ const Categories = db.Categorie;
 const Products = db.Product;
 const brandValidation = require("../validations/brandValidation");
 const asyncHandler = require("express-async-handler");
+
 const isEmptyFields = (data) => {
   const error = data.reduce((val, cur) => ({ ...val, ...cur }), {});
   return error;

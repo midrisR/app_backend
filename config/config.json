@@ -1,23 +1,23 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "database_development",
-    "host": "127.0.0.1",
+    "username": "fuypfxsv_user_development",
+    "password": "development123",
+    "database": "fuypfxsv_development",
+    "host": "projectme.my.id",
     "dialect": "mysql"
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
+    "username": "fuypfxsv_user_development",
+    "password": "development123",
+    "database": "fuypfxsv_test",
+    "host": "projectme.my.id",
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
+    "username": "fuypfxsv_user_development",
+    "password": "development123",
+    "database": "fuypfxsv_production",
+    "host": "projectme.my.id",
     "dialect": "mysql"
   }
 }

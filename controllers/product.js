@@ -72,6 +72,7 @@ const getProductsByid = async (req, res) => {
 const getProductsByCategories = asyncHandler(async (req, res) => {
   const { page, perPage, brands } = req.query;
   const { limit, offset } = getPagination(page, perPage);
+
   const { count, rows } = await Products.findAndCountAll({
     distinct: true,
     where: {
@@ -83,7 +84,7 @@ const getProductsByCategories = asyncHandler(async (req, res) => {
         model: Brands,
         where: {
           name: {
-            [Op.or]: brands !== "" ? [brands.split(",")] : [],
+            [Op.or]: brands ? brands.split(",") : []
           },
         },
         attributes: { exclude: ["createdAt", "updatedAt"] },
@@ -102,6 +103,7 @@ const getProductsByCategories = asyncHandler(async (req, res) => {
     limit,
     offset,
   });
+  
   const data = { count: count, rows };
   const products = getPagingData(data, page, limit);
   return res.status(200).json({ products, total: products.length });

@@ -37,12 +37,13 @@ app.use("/api/image/", imageRoute);
 
 app.use(errorHandler);
 
+
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
   try {
     await db.sequelize.authenticate();
     console.log("Synced db.");
   } catch (error) {
-    console.log("Failed to sync db: " + error.message);
+    console.log("Failed to sync db: " + error);
   }
 });
