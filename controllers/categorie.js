@@ -1,5 +1,6 @@
 const fs = require("fs");
 const db = require("../models");
+const path = require("path");
 const Categories = db.Categorie;
 const Products = db.Product;
 const brandValidation = require("../validations/brandValidation");
@@ -75,45 +76,73 @@ exports.updateCategorie = asyncHandler(async (req, res) => {
   const findCategorie = await Categories.findByPk(id);
 
   if (!findCategorie) {
-    return res.status(500).json("categorie not found");
+    return res.status(404).json({ error: "Category not found" });
   }
+
   const { error } = brandValidation(req.body);
   const errors = [];
 
+  // Hapus file jika ada error validasi
   if (error) {
-    for (let i = 0; i < req.files.length; i++) {
-      const { path } = req.files[i];
-      fs.unlinkSync(path);
+    if (req.files && req.files.length > 0) {
+      for (let i = 0; i < req.files.length; i++) {
+        const filePath = req.files[i].path;
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      }
     }
-    error?.details?.forEach(function (detail) {
-      errors.push({
-        [detail.path]: detail.message,
-      });
+
+    error?.details?.forEach((detail) => {
+      errors.push({ [detail.path]: detail.message });
     });
+
     res.status(422);
     throw isEmptyFields(errors);
   }
 
-  const categorie = await Categories.update(
+  const newImage = req?.files?.[0]?.filename || findCategorie.image;
+
+  // Update kategori di DB
+  await Categories.update(
     {
       name: req.body.name,
-      image: req?.files[0]?.filename || findCategorie.image,
+      image: newImage,
       published: req.body.published,
     },
-    { where: { id: req.params.id } }
+    { where: { id } }
   );
 
-  if (req.files.length > 0) {
-    const { filename } = req?.files[0];
-    const currentPath = "public/images/categories/" + filename;
-    const destinationPath = `public/images/categories/${id}/` + filename;
+  // Kelola file gambar
+  if (req.files && req.files.length > 0) {
+    const { filename } = req.files[0];
+    const folderPath = path.join("public/images/categories", id.toString());
+
+    // Pastikan folder tujuan ada
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath, { recursive: true });
+    }
+
+    const currentPath = path.join("public/images/categories", filename);
+    const destinationPath = path.join(folderPath, filename);
+
     fs.renameSync(currentPath, destinationPath);
-    fs.unlinkSync(`public/images/categories/${id}/${findCategorie.image}`);
+
+    const oldImagePath = path.join(folderPath, findCategorie.image);
+    if (fs.existsSync(oldImagePath)) {
+      fs.unlinkSync(oldImagePath);
+    }
   }
+
   return res.status(200).json({
     success: true,
-    categorie,
-    images: req?.files[0]?.filename || findCategorie.image,
+    categorie: {
+      id,
+      name: req.body.name,
+      image: newImage,
+      published: req.body.published,
+    },
+    image: newImage,
   });
 });
 

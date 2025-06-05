@@ -37,7 +37,6 @@ app.use("/api/image/", imageRoute);
 
 app.use(errorHandler);
 
-
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
   try {

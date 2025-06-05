@@ -15,28 +15,40 @@ const isEmptyFields = (data) => {
 };
 
 const getProducts = asyncHandler(async (req, res) => {
-  const { page, perPage, categories, brands } = req.query;
+  const {
+    page = 1,
+    perPage = 10,
+    categories = "",
+    brands = "",
+    search = "",
+  } = req.query;
   const { limit, offset } = getPagination(page, perPage);
+
+  const whereBrands = brands
+    ? { name: { [Op.in]: brands.split(",") } }
+    : undefined;
+
+  const whereCategories = categories
+    ? { name: { [Op.in]: categories.split(",") } }
+    : undefined;
+  const whereSearch = search
+    ? {
+        name: { [Op.like]: `%${search}%` }, // untuk MySQL
+      }
+    : {};
   const { count, rows } = await Products.findAndCountAll({
+    where: whereSearch,
     distinct: true,
     order: [["createdAt", "DESC"]],
     include: [
       {
         model: Brands,
-        where: {
-          name: {
-            [Op.or]: brands !== "" ? [brands.split(",")] : [],
-          },
-        },
+        where: whereBrands,
         attributes: { exclude: ["createdAt", "updatedAt"] },
       },
       {
         model: Categories,
-        where: {
-          name: {
-            [Op.or]: categories !== "" ? [categories.split(",")] : [],
-          },
-        },
+        where: whereCategories,
         attributes: {
           exclude: ["id", "image", "published", "createdAt", "updatedAt"],
         },
@@ -49,9 +61,10 @@ const getProducts = asyncHandler(async (req, res) => {
     limit,
     offset,
   });
-  const data = { count: count, rows };
-  const products = getPagingData(data, page, limit);
-  return res.status(200).json({ products, total: products.length });
+
+  const result = getPagingData({ count, rows }, page, limit);
+  // Kirim langsung sebagai response, tidak perlu nested "products: { products: [...] }"
+  res.status(200).json(result);
 });
 
 const getProductsByid = async (req, res) => {
@@ -84,7 +97,7 @@ const getProductsByCategories = asyncHandler(async (req, res) => {
         model: Brands,
         where: {
           name: {
-            [Op.or]: brands ? brands.split(",") : []
+            [Op.or]: brands ? brands.split(",") : [],
           },
         },
         attributes: { exclude: ["createdAt", "updatedAt"] },
@@ -103,7 +116,7 @@ const getProductsByCategories = asyncHandler(async (req, res) => {
     limit,
     offset,
   });
-  
+
   const data = { count: count, rows };
   const products = getPagingData(data, page, limit);
   return res.status(200).json({ products, total: products.length });
@@ -138,7 +151,6 @@ const addProduct = asyncHandler(async (req, res) => {
     categorieId: req.body.categorieId,
     description: req.body.description,
     brandId: req.body.brandId,
-    tag: req.body.tag,
     metaDescription: req.body.metaDescription,
     metaKeywords: req.body.metaKeywords,
     published: req.body.published,
@@ -197,7 +209,6 @@ const updateProduct = asyncHandler(async (req, res) => {
       categorieId: req.body.categorieId,
       description: req.body.description,
       brandId: req.body.brandId,
-      tag: req.body.tag,
       metaDescription: req.body.metaDescription,
       metaKeywords: req.body.metaKeywords,
       published: req.body.published,
