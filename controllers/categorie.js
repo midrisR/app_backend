@@ -77,6 +77,7 @@ exports.updateCategorie = asyncHandler(async (req, res) => {
   if (!findCategorie) {
     return res.status(500).json("categorie not found");
   }
+
   const { error } = brandValidation(req.body);
   const errors = [];
 
@@ -94,28 +95,47 @@ exports.updateCategorie = asyncHandler(async (req, res) => {
     throw isEmptyFields(errors);
   }
 
+  const newImage = req?.files[0]?.filename || findCategorie.image;
+
   const categorie = await Categories.update(
     {
       name: req.body.name,
-      image: req?.files[0]?.filename || findCategorie.image,
+      image: newImage,
       published: req.body.published,
     },
     { where: { id: req.params.id } }
   );
 
+  // Cek dan buat direktori jika belum ada
+  const folderPath = `public/images/categories/${id}`;
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath, { recursive: true });
+  }
+
+  // Jika ada file yang diupload
   if (req.files.length > 0) {
     const { filename } = req?.files[0];
-    const currentPath = "public/images/categories/" + filename;
-    const destinationPath = `public/images/categories/${id}/` + filename;
+    const currentPath = `public/images/categories/${filename}`;
+    const destinationPath = `${folderPath}/${filename}`;
+
     fs.renameSync(currentPath, destinationPath);
-    fs.unlinkSync(`public/images/categories/${id}/${findCategorie.image}`);
+
+    // Hapus gambar lama jika berbeda dan eksis
+    if (findCategorie.image && findCategorie.image !== filename) {
+      const oldImagePath = `${folderPath}/${findCategorie.image}`;
+      if (fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath);
+      }
+    }
   }
+
   return res.status(200).json({
     success: true,
     categorie,
-    images: req?.files[0]?.filename || findCategorie.image,
+    images: newImage,
   });
 });
+
 
 exports.deleteCategorie = async (req, res) => {
   const { id } = req.params;
