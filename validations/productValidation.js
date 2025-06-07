@@ -32,11 +32,6 @@ const Validation = (data) => {
         "any.required": "brand is a required field",
       })
       .custom(method, "custom validation"),
-    tag: Joi.string().required().messages({
-      "string.base": "should be a type of text",
-      "string.empty": "tag cannot be an empty field",
-      "any.required": "tag is a required field",
-    }),
     description: Joi.string().required().messages({
       "string.base": "should be a type of text",
       "string.empty": "description cannot be an empty field",

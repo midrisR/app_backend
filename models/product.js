@@ -21,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
       categorieId: DataTypes.INTEGER,
       description: DataTypes.TEXT,
       brandId: DataTypes.INTEGER,
-      tag: DataTypes.STRING,
       metaDescription: DataTypes.TEXT,
       metaKeywords: DataTypes.STRING,
       published: DataTypes.BOOLEAN,

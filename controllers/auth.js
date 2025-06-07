@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = db.User;
 const tokenList = {};
 const { loginValidation } = require("../validations/userValidation");
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   const error = loginValidation(req.body);
