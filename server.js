@@ -7,8 +7,9 @@ const userRoute = require("./router/user");
 const authRoute = require("./router/auth");
 const productRoute = require("./router/product");
 const categorieRoute = require("./router/categorie");
-const brandRoute = require("./router/brand");
 const vendorRoute = require("./router/vendor");
+const brandRoute = require("./router/brand");
+const bannerRoute = require("./router/banner");
 const clientRoute = require("./router/client");
 const offersRoute = require("./router/offers");
 const imageRoute = require("./router/image");
@@ -34,6 +35,7 @@ app.use("/api/vendor/", vendorRoute);
 app.use("/api/client/", clientRoute);
 app.use("/api/offers/", offersRoute);
 app.use("/api/image/", imageRoute);
+app.use("/api/banner/", bannerRoute);
 
 app.use(errorHandler);
 

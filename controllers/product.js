@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const fs = require("fs");
 const db = require("../models");
+const path = require("path");
 const Products = db.Product;
 const Images = db.Image;
 const Categories = db.Categorie;
@@ -230,15 +231,40 @@ const updateProduct = asyncHandler(async (req, res) => {
   return res.status(200).json({ success: true, product, images: images });
 });
 
-const deleteProduct = async (req, res) => {
+const deleteProduct = asyncHandler(async (req, res) => {
+  const productId = req.params.id;
+
+  // Hapus produk dari database
   const remove = await Products.destroy({
-    where: {
-      id: req.params.id,
-    },
+    where: { id: productId },
   });
-  fs.rmSync(`public/images/item/${req.params.id}`, { recursive: true });
-  return res.status(200).json({ success: true, remove });
-};
+
+  // Tetap lanjut walau produk tidak ditemukan (opsional bisa ditambah validasi if remove === 0)
+
+  // Path folder image sesuai ID produk
+  const imageFolderPath = path.join(
+    __dirname,
+    "../public/images/item",
+    productId
+  );
+
+  // Cek apakah folder ada, lalu hapus
+  if (fs.existsSync(imageFolderPath)) {
+    try {
+      fs.rmSync(imageFolderPath, { recursive: true, force: true });
+      console.log(`Folder ${imageFolderPath} berhasil dihapus.`);
+    } catch (err) {
+      console.error("Gagal menghapus folder:", err);
+    }
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "Product deleted",
+    remove,
+  });
+});
+
 module.exports = {
   getProducts,
   getProductsByid,

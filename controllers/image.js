@@ -50,6 +50,7 @@ exports.removeImg = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
 // banner
 exports.getBanner = asyncHandler(async (req, res) => {
   const banner = await Banner.findAll();
