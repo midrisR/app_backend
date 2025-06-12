@@ -146,7 +146,6 @@ exports.updateCategorie = asyncHandler(async (req, res) => {
   });
 });
 
-
 exports.deleteCategorie = async (req, res) => {
   const { id } = req.params;
 

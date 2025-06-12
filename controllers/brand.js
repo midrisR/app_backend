@@ -25,6 +25,7 @@ exports.findById = asyncHandler(async (req, res) => {
 exports.create = asyncHandler(async (req, res) => {
   const { error } = brandValidation(req.body);
   const errors = [];
+  console.log("body", req.body);
 
   if (error) {
     error.details.forEach(function (detail) {

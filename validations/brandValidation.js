@@ -1,4 +1,5 @@
 const Joi = require("joi");
+
 const method = (value, helpers) => {
   if (value === "undefined") {
     return helpers.error("any.required");
@@ -19,7 +20,7 @@ const brandValidation = (data) => {
         "any.required": "name is a required field",
       })
       .custom(method, "custom validation"),
-    published: Joi.string()
+    published: Joi.boolean()
       .required()
       .messages({
         "boolean.base": " should be a type of true or false",

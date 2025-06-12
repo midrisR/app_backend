@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Banner.init(
     {
-      information: DataTypes.STRING,
-      images: DataTypes.STRING,
+      name: DataTypes.STRING,
+      image: DataTypes.STRING,
       published: DataTypes.BOOLEAN,
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
