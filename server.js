@@ -39,6 +39,10 @@ app.use("/api/banner/", bannerRoute);
 
 app.use(errorHandler);
 
+app.get("/", (req, res) => {
+  res.send("hello world");
+});
+
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
   try {
