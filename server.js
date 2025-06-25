@@ -11,6 +11,7 @@ const vendorRoute = require("./router/vendor");
 const brandRoute = require("./router/brand");
 const bannerRoute = require("./router/banner");
 const clientRoute = require("./router/client");
+const employeRoute = require("./router/employe");
 const offersRoute = require("./router/offers");
 const imageRoute = require("./router/image");
 const { errorHandler } = require("./middleware/error");
@@ -36,6 +37,7 @@ app.use("/api/client/", clientRoute);
 app.use("/api/offers/", offersRoute);
 app.use("/api/image/", imageRoute);
 app.use("/api/banner/", bannerRoute);
+app.use("/api/employe/", employeRoute);
 
 app.use(errorHandler);
 
