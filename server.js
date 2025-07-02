@@ -14,6 +14,7 @@ const clientRoute = require("./router/client");
 const employeRoute = require("./router/employe");
 const offersRoute = require("./router/offers");
 const imageRoute = require("./router/image");
+const questionRoute = require("./router/question");
 const { errorHandler } = require("./middleware/error");
 const port = 5000;
 
@@ -38,6 +39,7 @@ app.use("/api/offers/", offersRoute);
 app.use("/api/image/", imageRoute);
 app.use("/api/banner/", bannerRoute);
 app.use("/api/employe/", employeRoute);
+app.use("/api/question/", questionRoute);
 
 app.use(errorHandler);
 
