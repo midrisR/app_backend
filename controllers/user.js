@@ -36,7 +36,6 @@ const create = async (req, res) => {
 
 // find all users
 const findAll = async (req, res) => {
-
   try {
     const users = await Users.findAll({
       attributes: { exclude: ["password"] },

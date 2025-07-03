@@ -8,6 +8,7 @@ const isEmptyFields = (data) => {
 };
 exports.create = asyncHandler(async (req, res) => {
   const { name, email, phone, message } = req.body;
+
   const { error } = questionValidation(req.body);
   const errors = [];
   if (error) {
@@ -26,7 +27,8 @@ exports.create = asyncHandler(async (req, res) => {
     phone: phone,
     message: message,
   });
-  return res.json({
+  return res.status(201).json({
+    success: true,
     message: "Questions created successfully.",
     data: results,
   });
@@ -41,13 +43,13 @@ exports.findAll = asyncHandler(async (req, res) => {
 
 exports.findById = asyncHandler(async (req, res) => {
   const question = await Questions.findByPk(req.params.id);
-  return res.json(question);
+  return res.json({ success: true, question });
 });
 
 exports.delete = asyncHandler(async (req, res) => {
   const question = await Questions.destroy({
     where: {
-      id: 1,
+      id: req.params.id,
     },
   });
   return res.status(200).json({

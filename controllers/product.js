@@ -80,8 +80,6 @@ const getProductsByid = async (req, res) => {
     ],
     attributes: { exclude: ["createdAt", "updatedAt"] },
   });
-  console.log(product);
-
   res.status(200).json(product);
 };
 
